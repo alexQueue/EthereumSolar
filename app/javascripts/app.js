@@ -121,8 +121,10 @@ window.App = {
         var name = web3.toAscii(data[0])
         console.log(name);
         var planet = new Planet(planetId, name, data[1], data[2], data[3], data[4], data[5]);
+        console.log(planet)
         planets.push(planet);
-        if (typeof planets != 'undefined' && planets.length >= numPlanets) {
+        
+        if (typeof planets != 'undefined' && planets.length == numPlanets) {
           window.Graphics.start();
         }
       }).catch(function(e) {
@@ -146,43 +148,51 @@ window.Graphics = {
   start: function() {
     
     var elem = document.getElementById('viewport');
-    two = new Two({ width: 500, height: 800 }).appendTo(elem);
+    two = new Two({ width: 300, height: 200 }).appendTo(elem);
     
-    var circle = two.makeCircle(-70, 0, 50);
-    var self = this;
+    // var circle = two.makeCircle(-70, 0, 50);
+    // circle.fill = '#FF8000';
 
-    planets.map(function(planet) { 
-      // var radius = planet.mass // simple, for now.
-      // var circle = two.makeCircle(planet.x, planet.y, radius);
+    // var self = this;
 
-      self.drawPlanet(planet); // WHY DOES THIS NO TWORK
-    });
+    var circles = planets.map(this.drawPlanet);
 
-    circle.fill = '#FF8000';
 
-    var group = two.makeGroup(circle);
+    // two has convenience methods to create shapes.
+
+    var group = two.makeGroup(circles);
     group.translation.set(two.width / 2, two.height / 2);
-    group.scale = 0;
-    group.noStroke();
+    // group.scale = 0;
+    // group.noStroke();
 
-    // Bind a function to scale and rotate the group
-    // to the animation loop.
-    two.bind('update', function(frameCount) {
-      // This code is called everytime two.update() is called.
-      // Effectively 60 times per second.
-      if (group.scale > 0.9999) {
-        group.scale = group.rotation = 0;
-      }
-      var t = (1 - group.scale) * 0.125;
-      group.scale += t;
-      group.rotation += t * 4 * Math.PI;
-    }).play();  // Finally, start the animation loop
+    two.update();
+
+    // // Bind a function to scale and rotate the group
+    // // to the animation loop.
+    // two.bind('update', function(frameCount) {
+    //   // This code is called everytime two.update() is called.
+    //   // Effectively 60 times per second.
+    //   if (group.scale > 0.9999) {
+    //     group.scale = group.rotation = 0;
+    //   }
+    //   var t = (1 - group.scale) * 0.125;
+    //   group.scale += t;
+    //   group.rotation += t * 4 * Math.PI;
+    // }).play();  // Finally, start the animation loop
   },
 
   drawPlanet: function(planet) {
-    var radius = planet.mass // simple, for now.
-    var circle = two.makeCircle(planet.x, planet.y, radius);
-    circle.fill = '#FF8000';
+    var radius = planet.mass / 10000000000000 // simple, for now.
+    var x = planet.x;
+    var y = planet.y;
+    var circle = two.makeCircle(x, y, radius);
+    circle.fill = '#FF8000';    
+    // circle.stroke = 'orangered';
+    // circle.linewidth = 5;
+    
+    var text = new Two.Text(planet.name, x, y);
+
+    return circle;
   },
 };
 
