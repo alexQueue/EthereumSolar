@@ -1,0 +1,12 @@
+TODO:
+
+- Contract:
+	- Pay to my address constantly or in a function. my address can be in the constructor args
+	- Figure out upper bound of planets and max string length. Set the restriction.
+		- Maybe remove cheapest existing planet, as a new one comes in.
+- Frontend
+	- Use two.js to render (e.g. view-source:https://two.js.org/examples/depths.html)
+	- Write physics engine.
+	- Allow planets to be created dynamically from clickdrag event.
+	- Pack two.js properly with webpack.
+
